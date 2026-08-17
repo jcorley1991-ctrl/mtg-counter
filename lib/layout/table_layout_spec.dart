@@ -13,38 +13,38 @@ class TableLayoutSpec {
     switch (count) {
       case 2:
         return const [
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.008, 0.984, 0.478), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.514, 0.984, 0.478), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.004, 0.992, 0.486), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.510, 0.992, 0.486), quarterTurns: 0),
         ];
       case 3:
         return const [
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.008, 0.984, 0.425), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.447, 0.484, 0.545), quarterTurns: 0),
-          SeatSpec(rect: Rect.fromLTWH(0.508, 0.447, 0.484, 0.545), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.004, 0.992, 0.432), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.448, 0.490, 0.548), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.506, 0.448, 0.490, 0.548), quarterTurns: 0),
         ];
       case 4:
         return const [
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.008, 0.484, 0.482), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.508, 0.008, 0.484, 0.482), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.510, 0.484, 0.482), quarterTurns: 0),
-          SeatSpec(rect: Rect.fromLTWH(0.508, 0.510, 0.484, 0.482), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.004, 0.490, 0.490), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.506, 0.004, 0.490, 0.490), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.506, 0.490, 0.490), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.506, 0.506, 0.490, 0.490), quarterTurns: 0),
         ];
       case 5:
         return const [
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.008, 0.484, 0.310), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.508, 0.008, 0.484, 0.310), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.008, 0.330, 0.452, 0.354), quarterTurns: 3),
-          SeatSpec(rect: Rect.fromLTWH(0.540, 0.330, 0.452, 0.354), quarterTurns: 1),
-          SeatSpec(rect: Rect.fromLTWH(0.105, 0.696, 0.790, 0.296), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.004, 0.490, 0.316), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.506, 0.004, 0.490, 0.316), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.332, 0.474, 0.352), quarterTurns: 3),
+          SeatSpec(rect: Rect.fromLTWH(0.522, 0.332, 0.474, 0.352), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.050, 0.696, 0.900, 0.300), quarterTurns: 0),
         ];
       case 6:
         return const [
-          SeatSpec(rect: Rect.fromLTWH(0.100, 0.006, 0.800, 0.224), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.006, 0.238, 0.444, 0.252), quarterTurns: 3),
-          SeatSpec(rect: Rect.fromLTWH(0.550, 0.238, 0.444, 0.252), quarterTurns: 1),
-          SeatSpec(rect: Rect.fromLTWH(0.006, 0.500, 0.444, 0.252), quarterTurns: 3),
-          SeatSpec(rect: Rect.fromLTWH(0.550, 0.500, 0.444, 0.252), quarterTurns: 1),
-          SeatSpec(rect: Rect.fromLTWH(0.100, 0.762, 0.800, 0.230), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.020, 0.004, 0.960, 0.230), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.244, 0.482, 0.246), quarterTurns: 3),
+          SeatSpec(rect: Rect.fromLTWH(0.514, 0.244, 0.482, 0.246), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.502, 0.482, 0.246), quarterTurns: 3),
+          SeatSpec(rect: Rect.fromLTWH(0.514, 0.502, 0.482, 0.246), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.020, 0.758, 0.960, 0.238), quarterTurns: 0),
         ];
       default:
         throw ArgumentError.value(count, 'count', 'Supported range is 2–6');
