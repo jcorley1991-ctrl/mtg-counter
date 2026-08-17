@@ -1,0 +1,47 @@
+name: Validate Flutter Scaffold
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  analyze-test-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Flutter stable
+        run: |
+          git clone https://github.com/flutter/flutter.git --depth 1 --branch stable "$HOME/flutter"
+          echo "$HOME/flutter/bin" >> "$GITHUB_PATH"
+      - name: Flutter version
+        run: flutter --version
+      - name: Generate temporary platform shells
+        run: ./tool/bootstrap_platforms.sh
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+      - name: Test
+        run: flutter test
+      - name: Build Android APK
+        run: flutter build apk --release
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: mtg-counter-android-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  ios-no-codesign:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Flutter stable
+        run: |
+          git clone https://github.com/flutter/flutter.git --depth 1 --branch stable "$HOME/flutter"
+          echo "$HOME/flutter/bin" >> "$GITHUB_PATH"
+      - name: Generate temporary platform shells
+        run: ./tool/bootstrap_platforms.sh
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Build iOS without signing
+        run: flutter build ios --release --no-codesign
