@@ -25,10 +25,7 @@ import hashlib
 
 root = Path('assets/branding')
 
-def decode_hex_chunks(pattern, output, expected_sha256):
-    parts = sorted(root.glob(pattern))
-    if not parts:
-        raise RuntimeError(f'No branding chunks matched {pattern}')
+def decode_parts(parts, output, expected_sha256):
     data = ''.join(part.read_text().strip() for part in parts)
     raw = bytes.fromhex(data)
     digest = hashlib.sha256(raw).hexdigest()
@@ -36,13 +33,31 @@ def decode_hex_chunks(pattern, output, expected_sha256):
         raise RuntimeError(f'{output} checksum mismatch: {digest}')
     (root / output).write_bytes(raw)
 
-decode_hex_chunks(
-    'app_icon.hex.*',
+icon_parts = sorted(root.glob('app_icon.hex.*'))
+decode_parts(
+    icon_parts,
     'app_icon.jpg',
     '260cd0a3831d022fa541c585a3e4b8602752ea0c3f4450cd5409ce3ada24b674',
 )
-decode_hex_chunks(
-    'startup.hex.*',
+
+startup_parts = [
+    root / 'startup.first.00',
+    root / 'startup.first.01',
+    root / 'startup.hex.00z',
+    root / 'startup.hex.01',
+    root / 'startup.hex.02',
+    root / 'startup.hex.03a',
+    root / 'startup.hex.03b',
+    root / 'startup.hex.04a0',
+    root / 'startup.hex.04a1',
+    root / 'startup.hex.04b0',
+    root / 'startup.hex.04b10',
+    root / 'startup.hex.04b110',
+    root / 'startup.hex.04b111',
+    root / 'startup.hex.05',
+]
+decode_parts(
+    startup_parts,
     'startup.jpg',
     '68944e8c4f51435950fd79f2044bab628b3ee0eb5582098d80cb414783ed63cc',
 )
