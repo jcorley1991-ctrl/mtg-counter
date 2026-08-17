@@ -40,10 +40,10 @@ class TableLayoutSpec {
       case 6:
         return const [
           SeatSpec(rect: Rect.fromLTWH(0.020, 0.004, 0.960, 0.230), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.004, 0.244, 0.482, 0.246), quarterTurns: 3),
-          SeatSpec(rect: Rect.fromLTWH(0.514, 0.244, 0.482, 0.246), quarterTurns: 1),
-          SeatSpec(rect: Rect.fromLTWH(0.004, 0.502, 0.482, 0.246), quarterTurns: 3),
-          SeatSpec(rect: Rect.fromLTWH(0.514, 0.502, 0.482, 0.246), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.244, 0.482, 0.246), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.514, 0.244, 0.482, 0.246), quarterTurns: 3),
+          SeatSpec(rect: Rect.fromLTWH(0.004, 0.502, 0.482, 0.246), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.514, 0.502, 0.482, 0.246), quarterTurns: 3),
           SeatSpec(rect: Rect.fromLTWH(0.020, 0.758, 0.960, 0.238), quarterTurns: 0),
         ];
       default:
