@@ -6,7 +6,7 @@ class UtilityBar extends StatelessWidget {
     required this.playerCount,
     required this.onReset,
     required this.onPlayerCount,
-    required this.onUndo,
+    required this.onHistory,
     required this.onTheme,
     required this.onDice,
   });
@@ -14,7 +14,7 @@ class UtilityBar extends StatelessWidget {
   final int playerCount;
   final VoidCallback onReset;
   final VoidCallback onPlayerCount;
-  final VoidCallback onUndo;
+  final VoidCallback onHistory;
   final VoidCallback onTheme;
   final VoidCallback onDice;
 
@@ -37,9 +37,21 @@ class UtilityBar extends StatelessWidget {
               label: '$playerCount',
               onTap: onPlayerCount,
             ),
-            _UtilityButton(icon: Icons.undo, label: 'UNDO', onTap: onUndo),
-            _UtilityButton(icon: Icons.palette_outlined, label: 'THEME', onTap: onTheme),
-            _UtilityButton(icon: Icons.casino_outlined, label: 'DICE', onTap: onDice),
+            _UtilityButton(
+              icon: Icons.history_outlined,
+              label: 'HISTORY',
+              onTap: onHistory,
+            ),
+            _UtilityButton(
+              icon: Icons.palette_outlined,
+              label: 'THEME',
+              onTap: onTheme,
+            ),
+            _UtilityButton(
+              icon: Icons.casino_outlined,
+              label: 'DICE',
+              onTap: onDice,
+            ),
           ],
         ),
       ),
@@ -48,7 +60,11 @@ class UtilityBar extends StatelessWidget {
 }
 
 class _UtilityButton extends StatelessWidget {
-  const _UtilityButton({required this.icon, required this.label, required this.onTap});
+  const _UtilityButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
 
   final IconData icon;
   final String label;
@@ -66,7 +82,10 @@ class _UtilityButton extends StatelessWidget {
           children: [
             Icon(icon, size: 21),
             const SizedBox(height: 2),
-            Text(label, style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w700)),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w700),
+            ),
           ],
         ),
       ),
