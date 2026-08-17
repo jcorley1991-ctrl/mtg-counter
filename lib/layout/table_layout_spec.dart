@@ -39,12 +39,12 @@ class TableLayoutSpec {
         ];
       case 6:
         return const [
-          SeatSpec(rect: Rect.fromLTWH(0.22, 0.02, 0.56, 0.20), quarterTurns: 2),
-          SeatSpec(rect: Rect.fromLTWH(0.02, 0.24, 0.30, 0.23), quarterTurns: 3),
-          SeatSpec(rect: Rect.fromLTWH(0.68, 0.24, 0.30, 0.23), quarterTurns: 1),
-          SeatSpec(rect: Rect.fromLTWH(0.02, 0.50, 0.30, 0.23), quarterTurns: 3),
-          SeatSpec(rect: Rect.fromLTWH(0.68, 0.50, 0.30, 0.23), quarterTurns: 1),
-          SeatSpec(rect: Rect.fromLTWH(0.22, 0.76, 0.56, 0.22), quarterTurns: 0),
+          SeatSpec(rect: Rect.fromLTWH(0.16, 0.015, 0.68, 0.215), quarterTurns: 2),
+          SeatSpec(rect: Rect.fromLTWH(0.015, 0.235, 0.385, 0.255), quarterTurns: 3),
+          SeatSpec(rect: Rect.fromLTWH(0.600, 0.235, 0.385, 0.255), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.015, 0.505, 0.385, 0.255), quarterTurns: 3),
+          SeatSpec(rect: Rect.fromLTWH(0.600, 0.505, 0.385, 0.255), quarterTurns: 1),
+          SeatSpec(rect: Rect.fromLTWH(0.16, 0.775, 0.68, 0.215), quarterTurns: 0),
         ];
       default:
         throw ArgumentError.value(count, 'count', 'Supported range is 2–6');
