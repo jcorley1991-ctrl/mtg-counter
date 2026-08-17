@@ -37,7 +37,7 @@ def decode_hex_chunks(pattern, output, expected_sha256):
     (root / output).write_bytes(raw)
 
 decode_hex_chunks(
-    'app_icon.hex.[0-9][0-9]',
+    'app_icon.hex.*',
     'app_icon.jpg',
     '260cd0a3831d022fa541c585a3e4b8602752ea0c3f4450cd5409ce3ada24b674',
 )
