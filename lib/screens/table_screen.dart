@@ -15,7 +15,7 @@ class TableScreen extends StatefulWidget {
 class _TableScreenState extends State<TableScreen> {
   int _playerCount = 4;
   late List<PlayerState> _players;
-  final List<List<PlayerState>> _history = [];
+  final List<_GameSnapshot> _history = [];
 
   static const _accents = <Color>[
     Color(0xFF4CB7FF),
@@ -43,21 +43,40 @@ class _TableScreenState extends State<TableScreen> {
   }
 
   void _checkpoint() {
-    _history.add(List<PlayerState>.of(_players));
+    _history.add(
+      _GameSnapshot(
+        playerCount: _playerCount,
+        players: List<PlayerState>.of(_players),
+      ),
+    );
     if (_history.length > 30) _history.removeAt(0);
   }
 
   void _changeLife(int index, int delta) {
     _checkpoint();
     setState(() {
-      _players[index] = _players[index].copyWith(life: _players[index].life + delta);
+      _players[index] = _players[index].copyWith(
+        life: _players[index].life + delta,
+      );
+    });
+  }
+
+  void _changePoison(int index, int delta) {
+    final next = (_players[index].poison + delta).clamp(0, 999);
+    if (next == _players[index].poison) return;
+
+    _checkpoint();
+    setState(() {
+      _players[index] = _players[index].copyWith(poison: next);
     });
   }
 
   void _undo() {
     if (_history.isEmpty) return;
+    final snapshot = _history.removeLast();
     setState(() {
-      _players = _history.removeLast();
+      _playerCount = snapshot.playerCount;
+      _players = List<PlayerState>.of(snapshot.players);
     });
   }
 
@@ -85,13 +104,117 @@ class _TableScreenState extends State<TableScreen> {
     );
 
     if (selected != null && selected != _playerCount) {
+      _checkpoint();
       setState(() => _playerCount = selected);
     }
   }
 
+  Future<void> _showPoisonControls(int index) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: const Color(0xFF111116),
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            final player = _players[index];
+            final lethal = player.poison >= 10;
+
+            void change(int delta) {
+              _changePoison(index, delta);
+              setSheetState(() {});
+            }
+
+            return SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: Colors.white24,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Text(
+                      '${player.name.toUpperCase()} — POISON',
+                      style: TextStyle(
+                        color: lethal ? const Color(0xFFFF5C5C) : const Color(0xFFC47AFF),
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 1.1,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${player.poison}',
+                      style: TextStyle(
+                        fontSize: 76,
+                        height: 1,
+                        fontWeight: FontWeight.w900,
+                        color: lethal ? const Color(0xFFFF5C5C) : Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      lethal ? 'POISON LETHAL — 10+' : '10 poison counters is lethal',
+                      style: TextStyle(
+                        color: lethal ? const Color(0xFFFF8A8A) : Colors.white54,
+                        fontWeight: lethal ? FontWeight.w800 : FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _PoisonButton(
+                            label: '−',
+                            onPressed: player.poison > 0 ? () => change(-1) : null,
+                          ),
+                        ),
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: _PoisonButton(
+                            label: '+',
+                            onPressed: () => change(1),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: player.poison == 0
+                            ? null
+                            : () {
+                                _checkpoint();
+                                setState(() {
+                                  _players[index] = _players[index].copyWith(poison: 0);
+                                });
+                                setSheetState(() {});
+                              },
+                        child: const Text('CLEAR POISON'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _showStageNotice(String feature) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$feature is reserved for its approved implementation stage.')),
+      SnackBar(
+        content: Text('$feature is reserved for its approved implementation stage.'),
+      ),
     );
   }
 
@@ -100,10 +223,18 @@ class _TableScreenState extends State<TableScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Reset game?'),
-        content: const Text('This resets life, poison, and commander-damage summaries for all players.'),
+        content: const Text(
+          'This resets life, poison, and commander-damage summaries for all players.',
+        ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('Cancel')),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: const Text('Reset')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Reset'),
+          ),
         ],
       ),
     );
@@ -112,7 +243,11 @@ class _TableScreenState extends State<TableScreen> {
     _checkpoint();
     setState(() {
       for (var i = 0; i < _players.length; i++) {
-        _players[i] = _players[i].copyWith(life: 40, poison: 0, commanderDamageSummary: 0);
+        _players[i] = _players[i].copyWith(
+          life: 40,
+          poison: 0,
+          commanderDamageSummary: 0,
+        );
       }
     });
   }
@@ -186,9 +321,37 @@ class _TableScreenState extends State<TableScreen> {
           player: _players[index],
           onDecreaseLife: () => _changeLife(index, -1),
           onIncreaseLife: () => _changeLife(index, 1),
-          onPoisonTap: () => _showStageNotice('Poison controls'),
+          onPoisonTap: () => _showPoisonControls(index),
           onCommanderDamageTap: () => _showStageNotice('Commander damage'),
           onSettingsTap: () => _showStageNotice('Player settings'),
+        ),
+      ),
+    );
+  }
+}
+
+class _GameSnapshot {
+  const _GameSnapshot({required this.playerCount, required this.players});
+
+  final int playerCount;
+  final List<PlayerState> players;
+}
+
+class _PoisonButton extends StatelessWidget {
+  const _PoisonButton({required this.label, required this.onPressed});
+
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 64,
+      child: FilledButton.tonal(
+        onPressed: onPressed,
+        child: Text(
+          label,
+          style: const TextStyle(fontSize: 34, fontWeight: FontWeight.w400),
         ),
       ),
     );

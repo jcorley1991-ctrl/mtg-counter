@@ -23,6 +23,7 @@ class PlayerPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accent = player.accent;
+    final poisonLethal = player.poison >= 10;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -123,15 +124,17 @@ class PlayerPanel extends StatelessWidget {
                         children: [
                           _CounterChip(
                             icon: Icons.coronavirus_outlined,
-                            label: compact ? '${player.poison}' : 'POISON ${player.poison}',
-                            color: const Color(0xFFC47AFF),
+                            label: compact
+                                ? '${player.poison}${poisonLethal ? '!' : ''}'
+                                : 'POISON ${player.poison}${poisonLethal ? '!' : ''}',
+                            color: poisonLethal
+                                ? const Color(0xFFFF5C5C)
+                                : const Color(0xFFC47AFF),
                             onTap: onPoisonTap,
                           ),
                           _CounterChip(
                             icon: Icons.shield_outlined,
-                            label: compact
-                                ? 'CMD ${player.commanderDamageSummary}'
-                                : 'CMD ${player.commanderDamageSummary}',
+                            label: 'CMD ${player.commanderDamageSummary}',
                             color: const Color(0xFFE2C477),
                             onTap: onCommanderDamageTap,
                           ),
@@ -212,7 +215,11 @@ class _CounterChip extends StatelessWidget {
               const SizedBox(width: 5),
               Text(
                 label,
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: color,
+                ),
               ),
             ],
           ),
