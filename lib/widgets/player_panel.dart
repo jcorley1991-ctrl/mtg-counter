@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -280,7 +281,7 @@ class _GearButton extends StatelessWidget {
   }
 }
 
-class _LifeButton extends StatelessWidget {
+class _LifeButton extends StatefulWidget {
   const _LifeButton({
     required this.symbol,
     required this.accent,
@@ -296,8 +297,41 @@ class _LifeButton extends StatelessWidget {
   final bool veryCompact;
 
   @override
+  State<_LifeButton> createState() => _LifeButtonState();
+}
+
+class _LifeButtonState extends State<_LifeButton> {
+  Timer? _holdTimer;
+
+  void _applyTen() {
+    for (var i = 0; i < 10; i++) {
+      widget.onTap();
+    }
+  }
+
+  void _startHold(LongPressStartDetails details) {
+    _applyTen();
+    _holdTimer?.cancel();
+    _holdTimer = Timer.periodic(
+      const Duration(milliseconds: 350),
+      (_) => _applyTen(),
+    );
+  }
+
+  void _stopHold() {
+    _holdTimer?.cancel();
+    _holdTimer = null;
+  }
+
+  @override
+  void dispose() {
+    _stopHold();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final size = veryCompact ? 35.0 : compact ? 43.0 : 58.0;
+    final size = widget.veryCompact ? 35.0 : widget.compact ? 43.0 : 58.0;
     return SizedBox.square(
       dimension: size,
       child: DecoratedBox(
@@ -305,37 +339,43 @@ class _LifeButton extends StatelessWidget {
           shape: BoxShape.circle,
           gradient: RadialGradient(
             colors: [
-              accent.withValues(alpha: 0.18),
+              widget.accent.withValues(alpha: 0.18),
               const Color(0xF20A0A0D),
             ],
           ),
           border: Border.all(
-            color: Color.lerp(const Color(0xFF806B42), accent, 0.45)!,
-            width: compact ? 1.1 : 1.6,
+            color: Color.lerp(const Color(0xFF806B42), widget.accent, 0.45)!,
+            width: widget.compact ? 1.1 : 1.6,
           ),
           boxShadow: [
             BoxShadow(
-              color: accent.withValues(alpha: 0.25),
-              blurRadius: compact ? 5 : 9,
+              color: widget.accent.withValues(alpha: 0.25),
+              blurRadius: widget.compact ? 5 : 9,
             ),
           ],
         ),
         child: Material(
           color: Colors.transparent,
           shape: const CircleBorder(),
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            onTap: onTap,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: widget.onTap,
+            onLongPressStart: _startHold,
+            onLongPressEnd: (_) => _stopHold(),
+            onLongPressCancel: _stopHold,
             child: Center(
               child: Text(
-                symbol,
+                widget.symbol,
                 style: TextStyle(
-                  fontSize: veryCompact ? 24 : compact ? 28 : 36,
+                  fontSize: widget.veryCompact ? 24 : widget.compact ? 28 : 36,
                   height: 1,
                   fontWeight: FontWeight.w300,
-                  color: Color.lerp(Colors.white, accent, 0.12),
+                  color: Color.lerp(Colors.white, widget.accent, 0.12),
                   shadows: [
-                    Shadow(color: accent.withValues(alpha: 0.48), blurRadius: 6),
+                    Shadow(
+                      color: widget.accent.withValues(alpha: 0.48),
+                      blurRadius: 6,
+                    ),
                   ],
                 ),
               ),
