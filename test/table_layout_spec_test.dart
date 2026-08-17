@@ -18,4 +18,12 @@ void main() {
       }
     }
   });
+
+  test('six-player inner seats are rotated 180 degrees from prior orientation', () {
+    final seats = TableLayoutSpec.forPlayerCount(6);
+    expect(
+      seats.map((seat) => seat.quarterTurns).toList(),
+      const [2, 1, 3, 1, 3, 0],
+    );
+  });
 }
