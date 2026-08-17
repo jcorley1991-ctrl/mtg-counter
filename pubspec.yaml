@@ -1,7 +1,7 @@
 name: mtg_counter_app
-description: Working scaffold for the approved MTG tabletop life and counter app.
+description: Approved MTG tabletop life and counter app.
 publish_to: "none"
-version: 0.1.0+1
+version: 0.2.0+2
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
