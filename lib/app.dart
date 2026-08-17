@@ -45,7 +45,7 @@ class _StartupGateState extends State<_StartupGate> {
         onTap: () => setState(() => _entered = true),
         child: SizedBox.expand(
           child: Image.asset(
-            'assets/branding/startup.jpg',
+            'assets/branding/startup.webp',
             fit: BoxFit.cover,
             filterQuality: FilterQuality.high,
           ),
