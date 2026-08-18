@@ -62,8 +62,8 @@ replace_once(
 )
 
 replace_once(
-    """                      color: lethal ? const Color(0xFFFF8A8A) : Colors.white54,""",
-    """                      color: lethal\n                          ? const Color(0xFFFF8A8A)\n                          : accent.withValues(alpha: 0.88),""",
+    """                  Text(\n                    'SOURCE: $playerName${lethal ? ' • LETHAL' : ''}',\n                    style: TextStyle(\n                      fontSize: 11,\n                      color: lethal ? const Color(0xFFFF8A8A) : Colors.white54,\n                      fontWeight: FontWeight.w700,\n                    ),\n                  ),""",
+    """                  Text(\n                    'SOURCE: $playerName${lethal ? ' • LETHAL' : ''}',\n                    style: TextStyle(\n                      fontSize: 11,\n                      color: lethal\n                          ? const Color(0xFFFF8A8A)\n                          : accent.withValues(alpha: 0.88),\n                      fontWeight: FontWeight.w700,\n                    ),\n                  ),""",
     'commander source player color',
 )
 
