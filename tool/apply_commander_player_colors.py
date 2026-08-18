@@ -31,59 +31,179 @@ if row_call_count != 2:
         f'commander row call sites: expected 2 matches, found {row_call_count}'
     )
 
-replace_once(
-    """  const _CommanderDamageRow({\n    required this.playerName,""",
-    """  const _CommanderDamageRow({\n    required this.accent,\n    required this.playerName,""",
-    'commander row constructor accent',
-)
+old_row = """class _CommanderDamageRow extends StatelessWidget {
+  const _CommanderDamageRow({
+    required this.playerName,
+    required this.commanderName,
+    required this.imageUrl,
+    required this.damage,
+    required this.onMinus,
+    required this.onPlus,
+  });
 
-replace_once(
-    """  final String playerName;\n  final String commanderName;""",
-    """  final Color accent;\n  final String playerName;\n  final String commanderName;""",
-    'commander row accent field',
-)
+  final String playerName;
+  final String commanderName;
+  final String imageUrl;
+  final int damage;
+  final VoidCallback onMinus;
+  final VoidCallback onPlus;
 
-replace_once(
-    """    return Card(\n      color: lethal ? const Color(0xFF351114) : const Color(0xFF18181F),""",
-    """    return Card(\n      color: lethal\n          ? Color.lerp(const Color(0xFF351114), accent, 0.18)\n          : Color.lerp(const Color(0xFF18181F), accent, 0.16),\n      shape: RoundedRectangleBorder(\n        borderRadius: BorderRadius.circular(12),\n        side: BorderSide(\n          color: lethal\n              ? Color.lerp(accent, const Color(0xFFFF5C5C), 0.58)!\n              : accent.withValues(alpha: 0.72),\n          width: 1.2,\n        ),\n      ),""",
-    'commander row card color',
-)
+  @override
+  Widget build(BuildContext context) {
+    final lethal = damage >= 21;
+    return Card(
+      color: lethal ? const Color(0xFF351114) : const Color(0xFF18181F),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            _CommanderAvatar(
+              imageUrl: imageUrl,
+              accent: lethal ? const Color(0xFFFF5C5C) : const Color(0xFFE2C477),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    commanderName.isEmpty ? 'Commander' : commanderName,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  Text(
+                    'SOURCE: $playerName${lethal ? ' • LETHAL' : ''}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: lethal ? const Color(0xFFFF8A8A) : Colors.white54,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(onPressed: damage > 0 ? onMinus : null, icon: const Icon(Icons.remove)),
+            SizedBox(
+              width: 38,
+              child: Text(
+                '$damage',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: lethal ? const Color(0xFFFF5C5C) : Colors.white,
+                ),
+              ),
+            ),
+            IconButton(onPressed: onPlus, icon: const Icon(Icons.add)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+"""
 
-replace_once(
-    """              accent: lethal ? const Color(0xFFFF5C5C) : const Color(0xFFE2C477),""",
-    """              accent: lethal\n                  ? Color.lerp(accent, const Color(0xFFFF5C5C), 0.48)!\n                  : accent,""",
-    'commander avatar player color',
-)
+new_row = """class _CommanderDamageRow extends StatelessWidget {
+  const _CommanderDamageRow({
+    required this.accent,
+    required this.playerName,
+    required this.commanderName,
+    required this.imageUrl,
+    required this.damage,
+    required this.onMinus,
+    required this.onPlus,
+  });
 
-replace_once(
-    """                    style: const TextStyle(fontWeight: FontWeight.w900),""",
-    """                    style: TextStyle(\n                      fontWeight: FontWeight.w900,\n                      color: accent,\n                    ),""",
-    'commander name player color',
-)
+  final Color accent;
+  final String playerName;
+  final String commanderName;
+  final String imageUrl;
+  final int damage;
+  final VoidCallback onMinus;
+  final VoidCallback onPlus;
 
-replace_once(
-    """                  Text(\n                    'SOURCE: $playerName${lethal ? ' • LETHAL' : ''}',\n                    style: TextStyle(\n                      fontSize: 11,\n                      color: lethal ? const Color(0xFFFF8A8A) : Colors.white54,\n                      fontWeight: FontWeight.w700,\n                    ),\n                  ),""",
-    """                  Text(\n                    'SOURCE: $playerName${lethal ? ' • LETHAL' : ''}',\n                    style: TextStyle(\n                      fontSize: 11,\n                      color: lethal\n                          ? const Color(0xFFFF8A8A)\n                          : accent.withValues(alpha: 0.88),\n                      fontWeight: FontWeight.w700,\n                    ),\n                  ),""",
-    'commander source player color',
-)
+  @override
+  Widget build(BuildContext context) {
+    final lethal = damage >= 21;
+    return Card(
+      color: lethal
+          ? Color.lerp(const Color(0xFF351114), accent, 0.18)
+          : Color.lerp(const Color(0xFF18181F), accent, 0.16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: lethal
+              ? Color.lerp(accent, const Color(0xFFFF5C5C), 0.58)!
+              : accent.withValues(alpha: 0.72),
+          width: 1.2,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            _CommanderAvatar(
+              imageUrl: imageUrl,
+              accent: lethal
+                  ? Color.lerp(accent, const Color(0xFFFF5C5C), 0.48)!
+                  : accent,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    commanderName.isEmpty ? 'Commander' : commanderName,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w900,
+                      color: accent,
+                    ),
+                  ),
+                  Text(
+                    'SOURCE: $playerName${lethal ? ' • LETHAL' : ''}',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: lethal
+                          ? const Color(0xFFFF8A8A)
+                          : accent.withValues(alpha: 0.88),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              onPressed: damage > 0 ? onMinus : null,
+              icon: Icon(Icons.remove, color: accent),
+            ),
+            SizedBox(
+              width: 38,
+              child: Text(
+                '$damage',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: lethal ? const Color(0xFFFF5C5C) : accent,
+                ),
+              ),
+            ),
+            IconButton(
+              onPressed: onPlus,
+              icon: Icon(Icons.add, color: accent),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+"""
 
-replace_once(
-    """            IconButton(onPressed: damage > 0 ? onMinus : null, icon: const Icon(Icons.remove)),""",
-    """            IconButton(\n              onPressed: damage > 0 ? onMinus : null,\n              icon: Icon(Icons.remove, color: accent),\n            ),""",
-    'commander minus color',
-)
-
-replace_once(
-    """                  color: lethal ? const Color(0xFFFF5C5C) : Colors.white,""",
-    """                  color: lethal ? const Color(0xFFFF5C5C) : accent,""",
-    'commander damage player color',
-)
-
-replace_once(
-    """            IconButton(onPressed: onPlus, icon: const Icon(Icons.add)),""",
-    """            IconButton(\n              onPressed: onPlus,\n              icon: Icon(Icons.add, color: accent),\n            ),""",
-    'commander plus color',
-)
+replace_once(old_row, new_row, 'commander damage row')
 
 replace_once(
     """                child: Text(\n                  '${source.name}\\n${slot == 0 ? source.commanderName : source.partnerCommanderName}',\n                ),""",
