@@ -4,12 +4,13 @@ publish_to: "none"
 version: 0.2.0+2
 
 environment:
-  sdk: ">=3.4.0 <4.0.0"
+  sdk: ">=3.11.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   shared_preferences: ^2.5.3
+  wakelock_plus: ^1.7.0
 
 dev_dependencies:
   flutter_test:
