@@ -80,6 +80,8 @@ text = text.replace('<string>mtg_counter_app</string>', '<string>13 Spells Life 
 plist.write_text(text)
 PY
 
+python3 tool/apply_commander_player_colors.py
+
 ICON="assets/branding/app_icon.jpg"
 for dir in android/app/src/main/res/mipmap-*; do
   rm -f "$dir/ic_launcher.png" "$dir/ic_launcher.webp" "$dir/ic_launcher.jpg"
