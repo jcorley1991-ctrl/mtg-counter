@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/table_screen.dart';
+import 'widgets/screen_awake_scope.dart';
 
 class MtgCounterApp extends StatelessWidget {
   const MtgCounterApp({super.key});
@@ -36,7 +37,11 @@ class _StartupGateState extends State<_StartupGate> {
 
   @override
   Widget build(BuildContext context) {
-    if (_entered) return const TableScreen();
+    if (_entered) {
+      return const ScreenAwakeScope(
+        child: TableScreen(),
+      );
+    }
 
     return Scaffold(
       backgroundColor: Colors.black,
