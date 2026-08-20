@@ -83,6 +83,7 @@ PY
 python3 tool/apply_commander_player_colors.py
 python3 tool/apply_aug20_approved_changes.py
 python3 tool/fix_aug20_transform_boundaries.py
+python3 tool/remove_aug20_obsolete_helper.py
 
 ICON="assets/branding/app_icon.jpg"
 for dir in android/app/src/main/res/mipmap-*; do
